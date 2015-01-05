@@ -2,7 +2,7 @@
 ### This is not called from primary_analysis.R (plotting will be done in Tableau)
 
 library(ggplot2)
-dayplot <- "20141014"
+dayplot <- "20141114"
 
 gtime1 <- as.POSIXlt(paste(dayplot,"160000"),format="%Y%m%d %H%M%S")
 gtime2 <- as.POSIXlt(paste(dayplot,"230000"),format="%Y%m%d %H%M%S")
@@ -87,9 +87,9 @@ colconfprop <- ggplot(chtm, aes(fringe, channel)) + geom_tile(aes(fill = sqrt(co
 #   title("Mexico TRPs and Visits")
 
 library(ggplot2)
-gbubble1 <- ggplot(chtm2, aes(ncost*count/ndays, lift_nv/ncost, size=count, label=paste(channel, fringe, dtype))) +
+gbubble1 <- ggplot(chtm, aes(ncost*count/ndays, lift_nv/ncost, size=count, label=paste(channel, fringe, dtype))) +
   geom_point(colour="red") +scale_size_area(max_size=20)+geom_text(size=3) +
-  xlab("Investment per day USD") + ylab("Current Efficiency") + ggtitle(paste(toupper(country),"Investment vs Efficiency",strftime(start,format="%b%d"),"-", strftime(end,format="%b%d")))
+  xlab("Investment per day USD") + ylab("Efficiency") + ggtitle(paste(toupper(country),"Investment vs Efficiency",strftime(start,format="%b%d"),"-", strftime(end,format="%b%d")))
 
 mc<-merge(chtm, chtm2, by=c("channel","fringe","dtype"))
 gbubble2 <- ggplot(mc, aes(ncost.y*count.y/ndays.y, eff.x, size=count.y, label=paste(channel, fringe, dtype))) +

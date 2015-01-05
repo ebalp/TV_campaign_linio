@@ -5,30 +5,30 @@ output: html_document
 
 
 ```{r echo=FALSE, results='hide', cache=TRUE}
-setwd("C:/Users/enrique.balp/Desktop/TV_campaign_linio/TV_analysis")
+setwd("C:/Users/enrique.balp/Desktop/TV_campaign_linio/TV_analysis")   
 source("./run_analysis.R" )
 ```
 
 ### Country is:
 ```{r echo=FALSE}
-country
+country 
 ```
-Mexico
+
 
 ```{r echo=FALSE}
 library(ggplot2)
 
-beg1<-as.POSIXlt("20140910",format="%Y%m%d")
-end1<-as.POSIXlt("20140916",format="%Y%m%d")
-
-beg2<-as.POSIXlt("20140917",format="%Y%m%d")
-end2<-as.POSIXlt("20140923",format="%Y%m%d")
-
-beg0<-as.POSIXlt("20140903",format="%Y%m%d")
-end0<-as.POSIXlt("20140909",format="%Y%m%d")
+# beg1<-as.POSIXlt("20140910",format="%Y%m%d")
+# end1<-as.POSIXlt("20140916",format="%Y%m%d")
+# 
+# beg2<-as.POSIXlt("20140917",format="%Y%m%d")
+# end2<-as.POSIXlt("20140923",format="%Y%m%d")
+# 
+# beg0<-as.POSIXlt("20140903",format="%Y%m%d")
+# end0<-as.POSIXlt("20140909",format="%Y%m%d")
 
 spts1 <- spot[which(spot$duration==30),]
-spts2 <- spot[which(spot$duration==10),]
+spts2 <- spot[which(spot$duration<20),]
 
 
 spts1$type <- "30\" Branding"

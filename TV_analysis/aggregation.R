@@ -29,13 +29,20 @@ suppressWarnings(chan$confprop <- chan$lift_nv/(qt(0.975,df=chan$count-1)*chan$l
 suppressWarnings(chan$good <- 1/(chan$confprop>1)/(chan$count>4))
 rm(chanlift,chancost,chanrat,chanliftsd)
 
+chan$eff <- chan$lift_nv/chan$ncost
+chan <- chan[with(chan, order(-eff)), ]
+chan$channel <- factor(chan$channel, levels = chan$channel[order(-chan$eff)])
+
+
 print("Channel-Fringe Aggregation")
 chanlift <- aggregate(lift_nv~channel+fringe+dtype,data=spot,mean)
-chancost <- aggregate(ncost~channel+fringe+dtype,data=spot,mean)
+channcost <- aggregate(ncost~channel+fringe+dtype,data=spot,mean)
+chancost <- aggregate(cost~channel+fringe+dtype,data=spot,mean)
 chanrat <- aggregate(rating~channel+fringe+dtype,data=spot,mean)
 chtmliftsd <-aggregate(lift_nv~channel+fringe+dtype,data=spot,sd,na.rm=TRUE)
 names(chtmliftsd) <- c("channel","fringe","dtype","liftsd")
 chtm <- merge(chanlift, chancost, by=c("channel","fringe","dtype"))
+chtm <- merge(chtm, channcost, by=c("channel","fringe","dtype"))
 chtm <- merge(chtm, chanrat, by=c("channel","fringe","dtype"))
 chtm <- merge(chtm, chtmliftsd, by = c("channel","fringe","dtype"))
 nspot <- count(spot, c('channel','fringe','dtype'))
@@ -47,13 +54,19 @@ tmpndays <- aggregate(date~channel+fringe+dtype,data=spot,function(x) length(uni
 chtm<- merge(chtm, tmpndays, by = c("channel","fringe","dtype"))
 suppressWarnings(chtm$conf <- (qt(0.975,df=chtm$count-1)*chtm$liftsd/sqrt(chtm$count)))
 suppressWarnings(chtm$confprop <- chtm$lift_nv/(qt(0.975,df=chtm$count-1)*chtm$liftsd/sqrt(chtm$count)))
-suppressWarnings(chtm$good <- 1/(chtm$confprop>1)/(chtm$count>3))
+chtm$eff <- round(chtm$lift_nv/chtm$ncost,3)
+suppressWarnings(chtm$good <- ifelse(chtm$eff<0.1 | (chtm$confprop>1 & chtm$count>4),1,0))
 rm(chanlift,chancost,chanrat,chtmliftsd)
-
-
-chtm$eff <- chtm$lift_nv/chtm$ncost
 chtm <- chtm[with(chtm, order(-eff)), ]
 res <- chtm[c("channel","fringe","dtype","eff","lift_nv","ncost", "count")]
+
+chtm$inv_per <- round(100*chtm$cost*chtm$count/sum(chtm$cost*chtm$count),2)
+effumb <- 0.01
+chtm$deg <- chtm$eff*ifelse(chtm$eff>effumb & chtm$good == 1,1,0)*ifelse(chtm$dtype=="we",2/7,5/7)
+chtm$inv_per_sugg <- round(100*chtm$deg/sum(chtm$deg),2)
+
+head(chtm[chtm$good == 1,c(1,2,3,14,16,18)],50)
+write.csv(head(chtm[chtm$good == 1,c(1,2,3,14,16,18)],50),paste(country,"_eff.csv"))
 write.csv(chtm,"chtm.csv")
 
 

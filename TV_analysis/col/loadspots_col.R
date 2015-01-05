@@ -29,6 +29,7 @@ for (i in 1:length(seqdays)){
   whch <- which((gsub(" ","",tolower(spotemp$channel)) == "espn")|(gsub(" ","",tolower(spotemp$channel)) == "espn+"))
   spotemp$cost[whch] <- 10 * spotemp$duration[whch] 
   spotemp$fringe <- substr(ibope$X.Franja.,2,2)
+  spotemp$fringe <- factor(spotemp$fringe, c("D","E","P","L"))
   spotemp$dist <- numeric(length(spotemp$tmstmp)) 
   if(wday(d)>1 && wday(d)<7) spotemp$dtype<-"wd" else spotemp$dtype<-"we"
   spotemp <- spotemp[with(spotemp, order(tmstmp)), ]
