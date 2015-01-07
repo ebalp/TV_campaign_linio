@@ -78,16 +78,16 @@ for(i in 1:length(seq)){
         # Bigquery data
         print(paste(fecha,"BigQuery data ..."))
         
-        data <- query_exec(project,dataset,query = sql, billing = project)
+        data <- query_exec(sql, project)
         data$date <- seq[i]
         
-        data_direct <- query_exec(project,dataset,query = sql_direct, billing = project)
+        data_direct <- query_exec(sql, project)
         data_direct$date <- seq[i]
         
-        data_organic <- query_exec(project,dataset,query = sql_organic, billing = project)
+        data_organic <- query_exec(sql, project)
         data_organic$date <- seq[i]
         
-        data_brand <- query_exec(project,dataset,query = sql_brand, billing = project)
+        data_brand <- query_exec(sql, project)
         data_brand$date <- seq[i]
         # MySQL data
         print(paste(fecha,"MySQL data ..."))
