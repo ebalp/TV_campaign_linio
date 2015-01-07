@@ -81,13 +81,13 @@ for(i in 1:length(seq)){
         data <- query_exec(sql, project)
         data$date <- seq[i]
         
-        data_direct <- query_exec(sql, project)
+        data_direct <- query_exec(sql_direct, project)
         data_direct$date <- seq[i]
         
-        data_organic <- query_exec(sql, project)
+        data_organic <- query_exec(sql_organic, project)
         data_organic$date <- seq[i]
         
-        data_brand <- query_exec(sql, project)
+        data_brand <- query_exec(sql_brand, project)
         data_brand$date <- seq[i]
         # MySQL data
         print(paste(fecha,"MySQL data ..."))
